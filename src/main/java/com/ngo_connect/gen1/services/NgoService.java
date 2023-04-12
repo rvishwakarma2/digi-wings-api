@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class NgoService {
     @Autowired
     NgoRepository nrepo;
+    @Autowired
     VolunteerRepository vrepo;
     public void create(Ngo ngo) {
         nrepo.save(ngo);

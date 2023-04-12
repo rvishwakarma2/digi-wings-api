@@ -9,20 +9,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/ngo")
+@RequestMapping("/v1")
 public class NgoController {
 
     @Autowired
     NgoService ngoService;
 
-    @PostMapping("/")
+    @PostMapping("/register-ngo")
     ResponseEntity<String> createNgo(@RequestBody Ngo ngo){
         ngoService.create(ngo);
         return new ResponseEntity<>("added successfully", HttpStatus.OK);
     }
 
 
-    @PostMapping("/")
+    @PostMapping("/register-volunteer")
     ResponseEntity<String> volunteerNgo(@RequestBody Volunteer volunteer){
         ngoService.createVolunteer(volunteer);
         return new ResponseEntity<>("added successfully", HttpStatus.OK);
