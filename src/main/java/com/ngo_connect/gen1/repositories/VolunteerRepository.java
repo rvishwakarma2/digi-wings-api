@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface VolunteerRepository extends CrudRepository<Volunteer, Integer> {
+    public Volunteer findByEmail(String email);
 }
