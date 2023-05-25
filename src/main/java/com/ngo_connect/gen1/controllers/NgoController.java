@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -21,6 +23,11 @@ public class NgoController {
     NgoService ngoService;
     @Autowired
     AuthService authService;
+
+    ResponseEntity<List<Ngo>> getAllNgos(){
+        List<Ngo> ngoList = ngoService.getAllNgos();
+        return new ResponseEntity<>(ngoList, HttpStatus.OK);
+    }
 
     @PostMapping("/register-ngo")
     ResponseEntity<MessageOnlyResponse> createNgo(@RequestBody Ngo ngo){
@@ -62,5 +69,7 @@ public class NgoController {
             return new ResponseEntity<>(tokenDTO.toString(), HttpStatus.OK);
         return new ResponseEntity<>("bad credentials", HttpStatus.BAD_REQUEST);
     }
+
+
 
 }

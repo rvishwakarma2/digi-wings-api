@@ -8,6 +8,8 @@ import com.ngo_connect.gen1.repositories.VolunteerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,5 +43,12 @@ public class NgoService {
                 return true;
         }
         return false;
+    }
+
+    public List<Ngo> getAllNgos() {
+        Iterable<Ngo> Ngos = nrepo.findAll();
+        List<Ngo> ngoList = new ArrayList<>();
+        Ngos.forEach(v -> ngoList.add(v));
+        return ngoList;
     }
 }
