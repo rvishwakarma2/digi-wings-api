@@ -26,7 +26,9 @@ public class SecurityConfiguration {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
+
 				.csrf()
+
 				.disable()
 
 				// Set unauthorized requests exception handler
@@ -48,6 +50,7 @@ public class SecurityConfiguration {
 //						"/webjars/**").permitAll()
 //				.requestMatchers("/api/**").authenticated();
 		// @formatter:on
+		http.cors();
 		return http.build();
 	}
 

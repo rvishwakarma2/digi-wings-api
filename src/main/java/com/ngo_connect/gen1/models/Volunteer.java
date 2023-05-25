@@ -20,5 +20,6 @@ public class Volunteer {
     String lastName;
     String email;
     String mobile;
+    String address;
     String password;
 }

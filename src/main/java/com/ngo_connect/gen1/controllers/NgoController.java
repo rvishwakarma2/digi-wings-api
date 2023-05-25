@@ -1,5 +1,6 @@
 package com.ngo_connect.gen1.controllers;
 
+import com.ngo_connect.gen1.models.MessageOnlyResponse;
 import com.ngo_connect.gen1.models.Ngo;
 import com.ngo_connect.gen1.models.Volunteer;
 import com.ngo_connect.gen1.models.dtos.CredsDTO;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1")
+@CrossOrigin(origins = "http://localhost:3000")
 public class NgoController {
 
     @Autowired
@@ -21,9 +23,9 @@ public class NgoController {
     AuthService authService;
 
     @PostMapping("/register-ngo")
-    ResponseEntity<String> createNgo(@RequestBody Ngo ngo){
+    ResponseEntity<MessageOnlyResponse> createNgo(@RequestBody Ngo ngo){
         ngoService.create(ngo);
-        return new ResponseEntity<>("added successfully", HttpStatus.OK);
+        return new ResponseEntity<>(new MessageOnlyResponse("added successfully"), HttpStatus.OK);
     }
 
     @PutMapping("/update-ngo")
