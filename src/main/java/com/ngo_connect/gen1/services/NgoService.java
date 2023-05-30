@@ -51,4 +51,19 @@ public class NgoService {
         Ngos.forEach(v -> ngoList.add(v));
         return ngoList;
     }
+
+    public boolean deleteNgo(int id) {
+        Optional<Ngo> optionalNgo = nrepo.findById(id);
+        if (optionalNgo.isPresent()) {
+            nrepo.delete(optionalNgo.get());
+            return true;
+        }
+        return false;
+    }
+
+    public Ngo getNgoById(int id) {
+        Optional<Ngo> ngoOptional = nrepo.findById(id);
+        if(ngoOptional.isPresent()) return ngoOptional.get();
+        return null;
+    }
 }

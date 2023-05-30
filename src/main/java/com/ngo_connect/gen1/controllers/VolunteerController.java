@@ -27,6 +27,7 @@ public class VolunteerController {
         @Autowired
         AuthService authService;
 
+        @GetMapping("/get-all-volunteers")
         ResponseEntity<List<Volunteer>> getAllVolunteers(){
             List<Volunteer> volList = vService.getAllVolunteers();
             return new ResponseEntity<>(volList, HttpStatus.OK);

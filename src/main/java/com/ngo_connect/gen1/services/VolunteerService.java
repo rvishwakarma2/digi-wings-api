@@ -6,11 +6,13 @@ import com.ngo_connect.gen1.models.dtos.CredsDTO;
 import com.ngo_connect.gen1.repositories.NgoRepository;
 import com.ngo_connect.gen1.repositories.VolunteerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class VolunteerService {
 
     @Autowired

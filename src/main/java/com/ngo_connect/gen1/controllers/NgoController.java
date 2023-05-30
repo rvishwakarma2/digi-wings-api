@@ -24,9 +24,18 @@ public class NgoController {
     @Autowired
     AuthService authService;
 
+    @GetMapping("/get-all-ngos")
     ResponseEntity<List<Ngo>> getAllNgos(){
         List<Ngo> ngoList = ngoService.getAllNgos();
         return new ResponseEntity<>(ngoList, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-ngo-by-id")
+    ResponseEntity<Ngo> getNgoById(@RequestParam int id){
+        Ngo ngo = ngoService.getNgoById(id);
+        if(ngo != null)
+            return new ResponseEntity<>(ngo, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/register-ngo")
@@ -40,13 +49,20 @@ public class NgoController {
         ngoService.update(ngo);
         return new ResponseEntity<>("updated successfully", HttpStatus.OK);
     }
-
-
-    @PostMapping("/register-volunteer")
-    ResponseEntity<String> volunteerNgo(@RequestBody Volunteer volunteer){
-        ngoService.createVolunteer(volunteer);
-        return new ResponseEntity<>("added successfully", HttpStatus.OK);
+    @DeleteMapping("/delete-ngo")
+    ResponseEntity<MessageOnlyResponse> deleteNgo(@RequestParam int id) throws Exception {
+        boolean deleted = ngoService.deleteNgo(id);
+        if(deleted)
+            return new ResponseEntity<>(new MessageOnlyResponse("deleted successfully"), HttpStatus.OK);
+        return new ResponseEntity<>(new MessageOnlyResponse("failed to delete"), HttpStatus.BAD_REQUEST);
     }
+//
+//
+//    @PostMapping("/register-volunteer")
+//    ResponseEntity<String> volunteerNgo(@RequestBody Volunteer volunteer){
+//        ngoService.createVolunteer(volunteer);
+//        return new ResponseEntity<>("added successfully", HttpStatus.OK);
+//    }
 
     @PostMapping("/validate-ngo-creds-get-token")
     ResponseEntity<String> validateNgoCredsGetToken(@RequestBody CredsDTO creds){
@@ -59,16 +75,16 @@ public class NgoController {
         return new ResponseEntity<>("bad credentials", HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/validate-volunteer-creds-get-token")
-    ResponseEntity<String> validateVolunteerCredsGetToken(@RequestBody CredsDTO creds){
-        TokenDTO tokenDTO = null;
-        if(ngoService.validateCreds(creds))
-            tokenDTO = authService.validateVolunteerCredsGetTokenService(creds);
-
-        if(tokenDTO!=null)
-            return new ResponseEntity<>(tokenDTO.toString(), HttpStatus.OK);
-        return new ResponseEntity<>("bad credentials", HttpStatus.BAD_REQUEST);
-    }
+//    @PostMapping("/validate-volunteer-creds-get-token")
+//    ResponseEntity<String> validateVolunteerCredsGetToken(@RequestBody CredsDTO creds){
+//        TokenDTO tokenDTO = null;
+//        if(ngoService.validateCreds(creds))
+//            tokenDTO = authService.validateVolunteerCredsGetTokenService(creds);
+//
+//        if(tokenDTO!=null)
+//            return new ResponseEntity<>(tokenDTO.toString(), HttpStatus.OK);
+//        return new ResponseEntity<>("bad credentials", HttpStatus.BAD_REQUEST);
+//    }
 
 
 
