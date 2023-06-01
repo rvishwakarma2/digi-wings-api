@@ -1,5 +1,9 @@
 package com.ngo_connect.gen1.controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.ngo_connect.gen1.models.MessageOnlyResponse;
 import com.ngo_connect.gen1.models.Ngo;
 import com.ngo_connect.gen1.models.Volunteer;
@@ -50,13 +54,11 @@ public class VolunteerController {
             TokenDTO tokenDTO = null;
             if(ngoService.validateCreds(creds))
                 tokenDTO = authService.validateVolunteerCredsGetTokenService(creds);
-
+            System.out.println(tokenDTO.toString());
             if(tokenDTO!=null)
                 return new ResponseEntity<>(tokenDTO.toString(), HttpStatus.OK);
             return new ResponseEntity<>("bad credentials", HttpStatus.BAD_REQUEST);
         }
-
-
 
 }
 

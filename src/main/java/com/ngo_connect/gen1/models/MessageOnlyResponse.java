@@ -1,5 +1,10 @@
 package com.ngo_connect.gen1.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 public class MessageOnlyResponse {
     public String msg;
 

@@ -1,5 +1,7 @@
 package com.ngo_connect.gen1.services;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.ngo_connect.gen1.models.Ngo;
 import com.ngo_connect.gen1.models.Volunteer;
 import com.ngo_connect.gen1.models.dtos.CredsDTO;
@@ -64,6 +66,26 @@ public class NgoService {
     public Ngo getNgoById(int id) {
         Optional<Ngo> ngoOptional = nrepo.findById(id);
         if(ngoOptional.isPresent()) return ngoOptional.get();
+        return null;
+    }
+
+    public String createOrupdateVolForm(JsonObject jsonObject) {
+        JsonElement jsonElement = jsonObject.get("ngoId");
+        Optional<Ngo> optionalNgo = nrepo.findById(jsonElement.getAsInt());
+        if(optionalNgo.isPresent()){
+            Ngo ngo = optionalNgo.get();
+            ngo.setRegFormForVol(jsonObject.toString());
+            nrepo.save(ngo);
+            return jsonObject.toString();
+        }
+        return null;
+    }
+
+    public String getVolRegFormById(int id) {
+        Optional<Ngo> optional = nrepo.findById(id);
+        if(optional.isPresent()){
+            return optional.get().getRegFormForVol();
+        }
         return null;
     }
 }

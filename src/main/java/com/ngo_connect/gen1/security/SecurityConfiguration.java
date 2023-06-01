@@ -42,7 +42,7 @@ public class SecurityConfiguration {
 				//.requestMatchers("/api/account/authenticate").permitAll()
 				//.requestMatchers("/api/account/register").permitAll()
 				//.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-				.requestMatchers("/**").permitAll();
+				.requestMatchers("/**", "/h2-console/**").permitAll();
 //				.requestMatchers(
 //						"/configuration/ui",
 //						"/swagger-resources/**",
@@ -50,6 +50,7 @@ public class SecurityConfiguration {
 //						"/webjars/**").permitAll()
 //				.requestMatchers("/api/**").authenticated();
 		// @formatter:on
+
 		http.cors();
 		return http.build();
 	}

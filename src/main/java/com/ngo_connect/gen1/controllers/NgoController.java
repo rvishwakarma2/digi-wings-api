@@ -1,5 +1,9 @@
 package com.ngo_connect.gen1.controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.ngo_connect.gen1.models.MessageOnlyResponse;
 import com.ngo_connect.gen1.models.Ngo;
 import com.ngo_connect.gen1.models.Volunteer;
@@ -56,13 +60,7 @@ public class NgoController {
             return new ResponseEntity<>(new MessageOnlyResponse("deleted successfully"), HttpStatus.OK);
         return new ResponseEntity<>(new MessageOnlyResponse("failed to delete"), HttpStatus.BAD_REQUEST);
     }
-//
-//
-//    @PostMapping("/register-volunteer")
-//    ResponseEntity<String> volunteerNgo(@RequestBody Volunteer volunteer){
-//        ngoService.createVolunteer(volunteer);
-//        return new ResponseEntity<>("added successfully", HttpStatus.OK);
-//    }
+
 
     @PostMapping("/validate-ngo-creds-get-token")
     ResponseEntity<String> validateNgoCredsGetToken(@RequestBody CredsDTO creds){
@@ -75,17 +73,31 @@ public class NgoController {
         return new ResponseEntity<>("bad credentials", HttpStatus.BAD_REQUEST);
     }
 
-//    @PostMapping("/validate-volunteer-creds-get-token")
-//    ResponseEntity<String> validateVolunteerCredsGetToken(@RequestBody CredsDTO creds){
-//        TokenDTO tokenDTO = null;
-//        if(ngoService.validateCreds(creds))
-//            tokenDTO = authService.validateVolunteerCredsGetTokenService(creds);
-//
-//        if(tokenDTO!=null)
-//            return new ResponseEntity<>(tokenDTO.toString(), HttpStatus.OK);
-//        return new ResponseEntity<>("bad credentials", HttpStatus.BAD_REQUEST);
-//    }
 
 
+    @PostMapping("/create-or-update-volunteer-registration-form")
+    ResponseEntity<MessageOnlyResponse> createOrUpdateVolunteerRegistrationForm(@RequestBody String regForm){
+        Gson gson = new Gson();
+        try{
+            JsonObject jsonObject = JsonParser.parseString(regForm).getAsJsonObject();
+            String response = ngoService.createOrupdateVolForm(jsonObject);
+            System.out.println(jsonObject.toString());
+            System.out.println(response);
+            if(response != null){
+                return new ResponseEntity<>(new MessageOnlyResponse(response), HttpStatus.OK);
+            }
+        }catch (IllegalStateException | JsonSyntaxException e){
+            return new ResponseEntity<>(new MessageOnlyResponse("invalid form json"), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(new MessageOnlyResponse("invalid request"), HttpStatus.BAD_REQUEST);
+    }
 
+    @GetMapping("/get-volunteer-registration-form-of-ngo-byId")
+    ResponseEntity<MessageOnlyResponse> getVolunteerRegistrationForm(@RequestParam int id){
+        String RegForm = ngoService.getVolRegFormById(id);
+        if(RegForm != null){
+            return new ResponseEntity<>(new MessageOnlyResponse(RegForm), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new MessageOnlyResponse("invalid request"), HttpStatus.BAD_REQUEST);
+    }
 }
