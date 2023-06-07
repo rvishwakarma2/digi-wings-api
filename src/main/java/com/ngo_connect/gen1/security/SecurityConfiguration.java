@@ -52,6 +52,7 @@ public class SecurityConfiguration {
 		// @formatter:on
 
 		http.cors();
+		http.headers().frameOptions().disable();
 		return http.build();
 	}
 

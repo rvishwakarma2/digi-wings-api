@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TokenDTO {
     String token;
-    NgoDTO ngoDTO;
-    VolunteerDTO volunteerDTO;
+    NgoDTO ngo;
+    VolunteerDTO volunteer;
 }

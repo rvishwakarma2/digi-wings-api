@@ -1,5 +1,6 @@
 package com.ngo_connect.gen1.models.dtos;
 
+import com.ngo_connect.gen1.models.Location;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,5 +20,6 @@ public class NgoDTO {
     String email;
     String mobile;
     String address;
+    Location location;
     //String password;
 }

@@ -1,11 +1,13 @@
 package com.ngo_connect.gen1.models;
 
+import com.ngo_connect.gen1.models.ngo.VolunteerResponses;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -21,6 +23,13 @@ public class Volunteer {
     String mobile;
     String address;
     String password;
-    @ManyToMany
-    List<Ngo> ngoList;
+
+    @Embedded
+    Location location;
+
+    @ManyToMany(mappedBy = "volunteerList")
+    Set<Ngo> ngoList;
+
+    @OneToMany(mappedBy = "volunteer",  cascade = CascadeType.ALL, orphanRemoval = true)
+    List<VolunteerResponses> responsesList;
 }

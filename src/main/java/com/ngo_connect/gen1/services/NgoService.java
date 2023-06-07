@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.ngo_connect.gen1.models.Ngo;
 import com.ngo_connect.gen1.models.Volunteer;
 import com.ngo_connect.gen1.models.dtos.CredsDTO;
+import com.ngo_connect.gen1.models.ngo.VolunteerResponses;
 import com.ngo_connect.gen1.repositories.NgoRepository;
 import com.ngo_connect.gen1.repositories.VolunteerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,5 +88,34 @@ public class NgoService {
             return optional.get().getRegFormForVol();
         }
         return null;
+    }
+
+    public List<VolunteerResponses> getVolunteerRequestsById(int ngoId) throws Exception {
+        Optional<Ngo> optional = nrepo.findById(ngoId);
+        if(optional.isPresent()){
+            List<VolunteerResponses> volunteerResponses = optional.get().getVolunteerResponsesList();
+            return volunteerResponses;
+        }
+        throw new Exception("ngo id is invalid");
+    }
+
+    public VolunteerResponses volunteerResponseManager(int ngoId, int vrId, boolean isApproved) throws Exception {
+        Optional<Ngo> optional = nrepo.findById(ngoId);
+        VolunteerResponses vr= null;
+        if(optional.isPresent()){
+            List<VolunteerResponses> volunteerResponses = optional.get().getVolunteerResponsesList();
+            for(VolunteerResponses vrs: volunteerResponses){
+                if(vrs.getId() == vrId){
+                    if(isApproved)
+                        vrs.setApproved(true);
+                    else
+                        vrs.setApproved(false);
+                    vr = vrs;
+                }
+            }
+        }else{
+            throw new Exception("invalid ngo id");
+        }
+        return vr;
     }
 }

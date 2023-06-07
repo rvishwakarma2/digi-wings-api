@@ -9,6 +9,7 @@ import com.ngo_connect.gen1.models.Ngo;
 import com.ngo_connect.gen1.models.Volunteer;
 import com.ngo_connect.gen1.models.dtos.CredsDTO;
 import com.ngo_connect.gen1.models.dtos.TokenDTO;
+import com.ngo_connect.gen1.models.ngo.VolunteerResponseDTO;
 import com.ngo_connect.gen1.services.AuthService;
 import com.ngo_connect.gen1.services.NgoService;
 import com.ngo_connect.gen1.services.VolunteerService;
@@ -50,16 +51,42 @@ public class VolunteerController {
         }
 
         @PostMapping("/validate-volunteer-creds-get-token")
-        ResponseEntity<String> validateVolunteerCredsGetToken(@RequestBody CredsDTO creds){
+        ResponseEntity<TokenDTO> validateVolunteerCredsGetToken(@RequestBody CredsDTO creds) throws Exception {
             TokenDTO tokenDTO = null;
             if(ngoService.validateCreds(creds))
                 tokenDTO = authService.validateVolunteerCredsGetTokenService(creds);
-            System.out.println(tokenDTO.toString());
             if(tokenDTO!=null)
-                return new ResponseEntity<>(tokenDTO.toString(), HttpStatus.OK);
-            return new ResponseEntity<>("bad credentials", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(tokenDTO, HttpStatus.OK);
+            throw new Exception("invalid credentials");
         }
 
+    @GetMapping("/get-nearby-ngo")
+    ResponseEntity<List<Ngo>> getNearByNgo(@RequestParam int vId, @RequestParam double maxDistance) throws Exception {
+        Volunteer volunteer = vService.getVolunteerById(vId);
+        List<Ngo> ngoList = vService.findNearbyNgos(volunteer, maxDistance);
+        return new ResponseEntity<>(ngoList, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-nearby-vol")
+    ResponseEntity<List<Volunteer>> getNearByVol(@RequestParam int vId, @RequestParam double maxDistance) throws Exception {
+        Volunteer volunteer = vService.getVolunteerById(vId);
+        List<Volunteer> volList = vService.findNearbyVolunteers(volunteer, maxDistance);
+        return new ResponseEntity<>(volList, HttpStatus.OK);
+    }
+
+    @PostMapping("/submit-ngo-reg-form")
+    ResponseEntity<MessageOnlyResponse> submitNgoRegForm(@RequestBody VolunteerResponseDTO vrd) throws Exception {
+        Ngo ngo = ngoService.getNgoById(vrd.getNgoId());
+        Volunteer vol = vService.getVolunteerById(vrd.getVolId());
+        boolean res = vService.submitNgoRegForm(ngo, vol, vrd.getResponse());
+
+        if (res) {
+            return new ResponseEntity<>(new MessageOnlyResponse("submission successful"), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(new MessageOnlyResponse("submission failed"), HttpStatus.OK);
+
+    }
 }
 
 

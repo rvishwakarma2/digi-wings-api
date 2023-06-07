@@ -9,6 +9,7 @@ import com.ngo_connect.gen1.models.Ngo;
 import com.ngo_connect.gen1.models.Volunteer;
 import com.ngo_connect.gen1.models.dtos.CredsDTO;
 import com.ngo_connect.gen1.models.dtos.TokenDTO;
+import com.ngo_connect.gen1.models.ngo.VolunteerResponses;
 import com.ngo_connect.gen1.services.AuthService;
 import com.ngo_connect.gen1.services.NgoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,14 +64,14 @@ public class NgoController {
 
 
     @PostMapping("/validate-ngo-creds-get-token")
-    ResponseEntity<String> validateNgoCredsGetToken(@RequestBody CredsDTO creds){
+    ResponseEntity<TokenDTO> validateNgoCredsGetToken(@RequestBody CredsDTO creds) throws Exception {
         TokenDTO tokenDTO = null;
         if(ngoService.validateCreds(creds))
             tokenDTO = authService.validateNgoCredsGetTokenService(creds);
 
         if(tokenDTO!=null)
-            return new ResponseEntity<>(tokenDTO.toString(), HttpStatus.OK);
-        return new ResponseEntity<>("bad credentials", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(tokenDTO, HttpStatus.OK);
+        throw new Exception("bad credentials");
     }
 
 
@@ -99,5 +100,24 @@ public class NgoController {
             return new ResponseEntity<>(new MessageOnlyResponse(RegForm), HttpStatus.OK);
         }
         return new ResponseEntity<>(new MessageOnlyResponse("invalid request"), HttpStatus.BAD_REQUEST);
+    }
+
+    //volunteer management code
+
+    @GetMapping("/volunteer-management/get-volunteer-requests")
+    ResponseEntity<List<VolunteerResponses>> getVolunteerRequestsById(@RequestParam int ngoId) throws Exception {
+        List<VolunteerResponses> volunteerResponses = ngoService.getVolunteerRequestsById(ngoId);
+            return new ResponseEntity<>(volunteerResponses, HttpStatus.OK);
+    }
+
+    @PostMapping("/volunteer-management/manager")
+    ResponseEntity<VolunteerResponses> volunteerResponseManager(@RequestParam int ngoId, @RequestParam int vrId, @RequestParam boolean isApproved) throws Exception {
+        System.out.println(ngoId);
+        System.out.println(vrId);
+        System.out.println(isApproved);
+
+        VolunteerResponses volunteerResponses = ngoService.volunteerResponseManager(ngoId, vrId, isApproved);
+        return new ResponseEntity<>(volunteerResponses, HttpStatus.OK);
+
     }
 }

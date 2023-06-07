@@ -28,7 +28,7 @@ public class AuthService {
     @Autowired
     JwtUtil jwtUtil;
 
-    public TokenDTO validateNgoCredsGetTokenService(CredsDTO creds) {
+    public TokenDTO validateNgoCredsGetTokenService(CredsDTO creds) throws Exception {
         TokenDTO tokenDTO = new TokenDTO();
         Ngo ngo = null;
         String token = null;
@@ -37,15 +37,17 @@ public class AuthService {
             if (ngo.getPassword().equals(creds.getPassword())) {
                 User ngoUser = new User(ngo.getEmail(), ngo.getPassword(), new ArrayList<>());
                 token = jwtUtil.generateToken(ngoUser);
-                tokenDTO.setNgoDTO(new NgoDTO(ngo.getRegistrationNumber(), ngo.getName(), ngo.getEmail(), ngo.getMobile(), ngo.getAddress()));
+                tokenDTO.setNgo(new NgoDTO(ngo.getRegistrationNumber(), ngo.getName(), ngo.getEmail(), ngo.getMobile(), ngo.getAddress(), ngo.getLocation()));
                 tokenDTO.setToken(token);
                 System.out.println(tokenDTO);
+                return tokenDTO;
             }
+            throw new Exception("invalid password");
         }
-        return tokenDTO;
+        throw new Exception("invalid email");
     }
 
-    public TokenDTO validateVolunteerCredsGetTokenService(CredsDTO creds) {
+    public TokenDTO validateVolunteerCredsGetTokenService(CredsDTO creds) throws Exception {
         TokenDTO tokenDTO = new TokenDTO();
         Volunteer volunteer = null;
         String token = null;
@@ -54,11 +56,12 @@ public class AuthService {
             if (volunteer.getPassword().equals(creds.getPassword())) {
                 User volunteerUser = new User(volunteer.getEmail(), volunteer.getPassword(), new ArrayList<>());
                 token = jwtUtil.generateToken(volunteerUser);
-                tokenDTO.setVolunteerDTO(new VolunteerDTO(volunteer.getFirstName(),volunteer.getLastName(), volunteer.getEmail(), volunteer.getMobile()));
+                tokenDTO.setVolunteer(new VolunteerDTO(volunteer.getFirstName(),volunteer.getLastName(), volunteer.getEmail(), volunteer.getMobile()));
                 tokenDTO.setToken(token);
-                System.out.println(tokenDTO);
+                return tokenDTO;
             }
+            throw new Exception("volunteer password invalid");
         }
-        return tokenDTO;
+        throw new Exception("volunteer email not found");
     }
 }
