@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -56,7 +57,7 @@ public class AuthService {
             if (volunteer.getPassword().equals(creds.getPassword())) {
                 User volunteerUser = new User(volunteer.getEmail(), volunteer.getPassword(), new ArrayList<>());
                 token = jwtUtil.generateToken(volunteerUser);
-                tokenDTO.setVolunteer(new VolunteerDTO(volunteer.getFirstName(),volunteer.getLastName(), volunteer.getEmail(), volunteer.getMobile()));
+                tokenDTO.setVolunteer(new VolunteerDTO(volunteer.getFirstName(),volunteer.getLastName(), volunteer.getEmail(), volunteer.getMobile(), volunteer.getAddress(), volunteer.getLocation(), new HashSet<>(), new ArrayList<>()));
                 tokenDTO.setToken(token);
                 return tokenDTO;
             }

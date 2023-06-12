@@ -1,12 +1,15 @@
 package com.ngo_connect.gen1.models.dtos;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.ngo_connect.gen1.models.Location;
+import com.ngo_connect.gen1.models.Ngo;
+import com.ngo_connect.gen1.models.ngo.VolunteerResponses;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.Set;
 
 
 @Data
@@ -18,5 +21,9 @@ public class VolunteerDTO {
     String lastName;
     String email;
     String mobile;
+    String address;
     //String password;
+    Location location;
+    Set<Ngo> ngoList;
+    List<VolunteerResponses> responsesList;
 }
